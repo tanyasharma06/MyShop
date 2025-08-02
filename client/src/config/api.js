@@ -3,7 +3,7 @@ const API_CONFIG = {
   // BASE_URL: 'http://localhost:5000',
   
   // Production (update with your actual Render backend URL after deployment)
-  BASE_URL: 'https://myshop-cwax.onrender.com'
+  BASE_URL: 'https://myshopb.onrender.com'
 };
 
 export default API_CONFIG;
