@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_CONFIG } from "../../config/api";
 
 const initialState = {
   cartItems: [],
@@ -12,7 +13,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }, thunkAPI) => {
     try {
-      const response = await axios.post("http://localhost:5000/api/shop/cart/add", {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/api/shop/cart/add`, {
         userId,
         productId,
         quantity,
@@ -29,7 +30,7 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async (userId, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/shop/cart/get/${userId}`);
+      const response = await axios.get(`${API_CONFIG.BASE_URL}/api/shop/cart/get/${userId}`);
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch cart items");
@@ -43,7 +44,7 @@ export const deleteCartItem = createAsyncThunk(
   async ({ userId, productId }, thunkAPI) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/shop/cart/${userId}/${productId}`
+        `${API_CONFIG.BASE_URL}/api/shop/cart/${userId}/${productId}`
       );
       return response.data.data;
     } catch (error) {
@@ -57,7 +58,7 @@ export const updateCartQuantity = createAsyncThunk(
   "cart/updateCartQuantity",
   async ({ userId, productId, quantity }, thunkAPI) => {
     try {
-      const response = await axios.put("http://localhost:5000/api/shop/cart/update-cart", {
+      const response = await axios.put(`${API_CONFIG.BASE_URL}/api/shop/cart/update-cart`, {
         userId,
         productId,
         quantity,
