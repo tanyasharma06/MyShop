@@ -30,6 +30,16 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const checkAuth = createAsyncThunk(
+  "auth/checkAuth",
+  async () => {
+    const response = await axios.get(
+      `${API_CONFIG.BASE_URL}/api/auth/check-auth`
+    );
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -62,6 +72,18 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(checkAuth.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.data;
+        state.error = null;
+      })
+      .addCase(checkAuth.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });
