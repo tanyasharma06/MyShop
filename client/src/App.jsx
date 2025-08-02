@@ -1,5 +1,5 @@
 import './App.css'
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense} from 'react';
 import AdminLayout from './components/admin-view/layout';
 import AuthLayout from './components/auth/layout';
 import ShoppingLayout from './components/shopping-view/layout';
