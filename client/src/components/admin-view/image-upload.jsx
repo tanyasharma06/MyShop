@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
-import  API_CONFIG from "../../config/api";
+import API_CONFIG from "../../config/api";
 
 function ProductImageUpload ({imageFile, setImageFile, uploadedImageUrl, setUploadedImageUrl , isEditMode ,setImageLoadingState , imageLoadingState}) {
   const inputRef = useRef(null);
