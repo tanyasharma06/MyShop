@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { API_CONFIG } from "../../../config/api";
+import  API_CONFIG  from "../../../config/api";
 
 const initialState = {
   cartItems: [],

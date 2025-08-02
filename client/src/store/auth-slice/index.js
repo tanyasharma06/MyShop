@@ -1,76 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_CONFIG } from "../../config/api";
+import API_CONFIG from "../../config/api";
 
 const initialState = {
-  isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
   user: null,
+  error: null,
 };
 
 export const registerUser = createAsyncThunk(
-  "/auth/register",
-
+  "auth/registerUser",
   async (formData) => {
     const response = await axios.post(
       `${API_CONFIG.BASE_URL}/api/auth/register`,
-      formData,
-      {
-        withCredentials: true,
-      }
+      formData
     );
-
     return response.data;
   }
 );
 
 export const loginUser = createAsyncThunk(
-  "/auth/login",
-
+  "auth/loginUser",
   async (formData) => {
     const response = await axios.post(
       `${API_CONFIG.BASE_URL}/api/auth/login`,
-      formData,
-      {
-        withCredentials: true,
-      }
+      formData
     );
-
-    return response.data;
-  }
-);
-
-export const logoutUser = createAsyncThunk(
-  "/auth/logout",
-
-  async () => {
-    const response = await axios.post(
-      `${API_CONFIG.BASE_URL}/api/auth/logout`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-
-    return response.data;
-  }
-);
-
-export const checkAuth = createAsyncThunk(
-  "/auth/checkauth",
-
-  async () => {
-    const response = await axios.get(
-      `${API_CONFIG.BASE_URL}/api/auth/check-auth`,
-      {
-        withCredentials: true,
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      }
-    );
-
     return response.data;
   }
 );
@@ -79,58 +34,40 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action) => {},
+    logout: (state) => {
+      state.user = null;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.user = action.payload.data;
+        state.error = null;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.error.message;
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action);
-
         state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated = action.payload.success;
+        state.user = action.payload.data;
+        state.error = null;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-      .addCase(checkAuth.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(checkAuth.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated = action.payload.success;
-      })
-      .addCase(checkAuth.rejected, (state) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
-      })
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.isLoading = false;
-        state.user = null;
-        state.isAuthenticated = false;
+        state.error = action.error.message;
       });
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { logout } = authSlice.actions;
+
 export default authSlice.reducer;
