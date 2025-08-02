@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://myshopf3.onrender.com' // Add your frontend domain when you have it
+    https://myshopf3.onrender.com/auth/login' // Add your frontend domain when you have it
 ];
 
 app.use(
