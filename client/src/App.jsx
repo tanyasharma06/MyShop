@@ -1,4 +1,5 @@
 import './App.css'
+import React, { Suspense, lazy } from 'react';
 import AdminLayout from './components/admin-view/layout';
 import AuthLayout from './components/auth/layout';
 import ShoppingLayout from './components/shopping-view/layout';
@@ -37,6 +38,7 @@ function App () {
     if(isLoading) return <Skeleton className="h-[600px] w-[800px] bg-black" />
   return (
 <div className='flex flex-col overflow-hidden bg-white'>
+ <Suspense fallback={<div>Loading...</div>}>
   <Routes>
     <Route path='/' element={<Navigate to="/auth/login" replace />} />
     <Route path='/auth' element={
@@ -75,6 +77,7 @@ function App () {
     <Route path= '*' element ={<NotFound/>} />
     <Route path='/unauth-page' element={<UnauthPage/>} />
   </Routes>
+     </Suspense>
   <Toaster />
 </div>
 
