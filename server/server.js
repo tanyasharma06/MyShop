@@ -34,13 +34,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-    'http://localhost:5173',
-<<<<<<< HEAD
-     // Add your frontend domain when you have it
-=======
-   'https://myshopf3.onrender.com' // Add your frontend domain when you have it
->>>>>>> e0c8035390464f4ab7b8f2cdb114ea8ec60fd2db
-];
+    'http://localhost:5173'];
 
 app.use(
     cors({
