@@ -2,23 +2,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
-// ✅ /register
+//register
 const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
 
   try {
-    // Check if user already exists
     const checkUser = await User.findOne({ email });
     if (checkUser)
       return res.json({
         success: false,
-        message: "User already exists with the same email! Please try again",
+        message: "User Already exists with the same email! Please try again",
       });
 
-    // Hash the password
     const hashPassword = await bcrypt.hash(password, 12);
-
-    // Create new user
     const newUser = new User({
       userName,
       email,
@@ -26,13 +22,12 @@ const registerUser = async (req, res) => {
     });
 
     await newUser.save();
-
     res.status(200).json({
       success: true,
       message: "Registration successful",
     });
   } catch (e) {
-    console.error("Registration Error:", e);
+    console.log(e);
     res.status(500).json({
       success: false,
       message: "Some error occurred",
@@ -40,7 +35,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// ✅ /login
+//login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -49,10 +44,13 @@ const loginUser = async (req, res) => {
     if (!checkUser)
       return res.json({
         success: false,
-        message: "User doesn't exist! Please register first",
+        message: "User doesn't exists! Please register first",
       });
 
-    const checkPasswordMatch = await bcrypt.compare(password, checkUser.password);
+    const checkPasswordMatch = await bcrypt.compare(
+      password,
+      checkUser.password
+    );
     if (!checkPasswordMatch)
       return res.json({
         success: false,
@@ -66,11 +64,11 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
         userName: checkUser.userName,
       },
-      process.env.JWT_SECRET || "CLIENT_SECRET_KEY",
+      "CLIENT_SECRET_KEY",
       { expiresIn: "60m" }
     );
 
-    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax" }).json({
+    res.cookie("token", token, { httpOnly: true, secure: false }).json({
       success: true,
       message: "Logged in successfully",
       user: {
@@ -81,7 +79,7 @@ const loginUser = async (req, res) => {
       },
     });
   } catch (e) {
-    console.error("Login Error:", e);
+    console.log(e);
     res.status(500).json({
       success: false,
       message: "Some error occurred",
@@ -89,7 +87,8 @@ const loginUser = async (req, res) => {
   }
 };
 
-// ✅ /logout
+//logout
+
 const logoutUser = (req, res) => {
   res.clearCookie("token").json({
     success: true,
@@ -97,7 +96,7 @@ const logoutUser = (req, res) => {
   });
 };
 
-// ✅ auth middleware
+//auth middleware
 const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token)
@@ -107,7 +106,7 @@ const authMiddleware = async (req, res, next) => {
     });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "CLIENT_SECRET_KEY");
+    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
     req.user = decoded;
     next();
   } catch (error) {
@@ -118,9 +117,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  registerUser,
-  loginUser,
-  logoutUser,
-  authMiddleware,
-};
+module.exports = { registerUser, loginUser, logoutUser, authMiddleware };

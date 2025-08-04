@@ -1,7 +1,7 @@
 function NotFound() {
     return (
         <div>
-            Pgae Does Not Exist
+            Page Does Not Exist
         </div>
       );
 }

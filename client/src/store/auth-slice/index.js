@@ -1,41 +1,75 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import API_CONFIG from "../../config/api";
 
 const initialState = {
-  isLoading: false,
+  isAuthenticated: false,
+  isLoading: true,
   user: null,
-  error: null,
 };
 
 export const registerUser = createAsyncThunk(
-  "auth/registerUser",
+  "/auth/register",
+
   async (formData) => {
     const response = await axios.post(
-      `${API_CONFIG.BASE_URL}/api/auth/register`,
-      formData
+      "http://localhost:5000/api/auth/register",
+      formData,
+      {
+        withCredentials: true,
+      }
     );
+
     return response.data;
   }
 );
 
 export const loginUser = createAsyncThunk(
-  "auth/loginUser",
+  "/auth/login",
+
   async (formData) => {
     const response = await axios.post(
-      `${API_CONFIG.BASE_URL}/api/auth/login`,
-      formData
+      "http://localhost:5000/api/auth/login",
+      formData,
+      {
+        withCredentials: true,
+      }
     );
+
+    return response.data;
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "/auth/logout",
+
+  async () => {
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+
     return response.data;
   }
 );
 
 export const checkAuth = createAsyncThunk(
-  "auth/checkAuth",
+  "/auth/checkauth",
+
   async () => {
     const response = await axios.get(
-      `${API_CONFIG.BASE_URL}/api/auth/check-auth`
+      "http://localhost:5000/api/auth/check-auth",
+      {
+        withCredentials: true,
+        headers: {
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
     );
+
     return response.data;
   }
 );
@@ -44,52 +78,58 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.error = null;
-    },
+    setUser: (state, action) => {},
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = action.payload.data;
-        state.error = null;
+        state.user = null;
+        state.isAuthenticated = false;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log(action);
+
         state.isLoading = false;
-        state.user = action.payload.data;
-        state.error = null;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload.success;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.data;
-        state.error = null;
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload.success;
       })
-      .addCase(checkAuth.rejected, (state, action) => {
+      .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
-
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

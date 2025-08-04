@@ -1,26 +1,27 @@
-import { BadgeCheck, LayoutDashboard, ShoppingBasket } from "lucide-react";
-
-export const registerFormControls= [{
-    name:'userName',
-    label:'Username',
-    placeholder:'Enter your username',
-    componentType:'input',
-    type:'text',
-},
-{
-name:'email',
- label:'Email',
- placeholder:'Enter your e-mail',
- componentType:'input',
- type:'email',
-},
-{ name:'password',
- label:'Password',
- placeholder:'Enter your password',
- componentType:'input',
- type:'password',
-}
+export const registerFormControls = [
+  {
+    name: "userName",
+    label: "User Name",
+    placeholder: "Enter your user name",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "email",
+    label: "Email",
+    placeholder: "Enter your email",
+    componentType: "input",
+    type: "email",
+  },
+  {
+    name: "password",
+    label: "Password",
+    placeholder: "Enter your password",
+    componentType: "input",
+    type: "password",
+  },
 ];
+
 export const loginFormControls = [
   {
     name: "email",
@@ -37,6 +38,7 @@ export const loginFormControls = [
     type: "password",
   },
 ];
+
 export const addProductFormElements = [
   {
     label: "Title",
@@ -98,6 +100,7 @@ export const addProductFormElements = [
     placeholder: "Enter total stock",
   },
 ];
+
 export const shoppingViewHeaderMenuItems = [
   {
     id: "home",
@@ -155,7 +158,7 @@ export const brandOptionsMap = {
   puma: "Puma",
   levi: "Levi",
   zara: "Zara",
-  "h&m" : "H&M"
+  "h&m": "H&M",
 };
 
 export const filterOptions = {

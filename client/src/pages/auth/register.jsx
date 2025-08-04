@@ -1,35 +1,37 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { registerFormControls } from "@/config";
 import CommonForm from "@/components/common/form";
-import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { registerFormControls } from "@/config";
 import { registerUser } from "@/store/auth-slice";
-import { toast } from "sonner"; // or wherever your toast hook is
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const initialState = {
-    userName:'',
-    email:'',
-    password:''
-}
+  userName: "",
+  email: "",
+  password: "",
+};
 
-function AuthRegister () {
-    const [formData , setFormData] = useState(initialState);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-function onSubmit(event) {
-  event.preventDefault();
-  dispatch(registerUser(formData)).then((data)=>{
-    if (data?.payload?.success) {
-        toast(data?.payload?.message); // ✅ simple
+function AuthRegister() {
+  const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function onSubmit(event) {
+    event.preventDefault();
+    dispatch(registerUser(formData)).then((data) => {
+      if (data?.payload?.success) {
+        toast.success( data?.payload?.message)
         navigate("/auth/login");
       } else {
-        toast(data?.payload?.message); // ✅ still simple
+        toast.error(data?.payload?.message)
       }
-      });
+    });
   }
-  
-console.log("Form Data:", formData);
-     return (
+
+  console.log(formData);
+
+  return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -45,7 +47,7 @@ console.log("Form Data:", formData);
           </Link>
         </p>
       </div>
-       <CommonForm
+      <CommonForm
         formControls={registerFormControls}
         buttonText={"Sign Up"}
         formData={formData}
@@ -56,4 +58,4 @@ console.log("Form Data:", formData);
   );
 }
 
-export default AuthRegister ;
+export default AuthRegister;

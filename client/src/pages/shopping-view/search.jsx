@@ -82,9 +82,7 @@ function SearchProducts() {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
-        toast({
-          title: "Product is added to cart",
-        });
+        toast.success( "Product is added to cart")
       }
     });
   }

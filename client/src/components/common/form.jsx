@@ -25,20 +25,19 @@ function CommonForm({
     switch (getControlItem.componentType) {
       case "input":
         element = (
-            <Input
-              name={getControlItem.name}
-              placeholder={getControlItem.placeholder}
-              id={getControlItem.name}
-              type={getControlItem.type}
-              value={value}
-              onChange={(event) => {
-                console.log(`Input changed: ${getControlItem.name} = ${event.target.value}`);
-                setFormData({
-                  ...formData,
-                  [getControlItem.name]: event.target.value,
-                });
-              }}
-            />
+          <Input
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            id={getControlItem.name}
+            type={getControlItem.type}
+            value={value}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: event.target.value,
+              })
+            }
+          />
         );
 
         break;
@@ -76,13 +75,12 @@ function CommonForm({
             placeholder={getControlItem.placeholder}
             id={getControlItem.id}
             value={value}
-            onChange={(event) => {
-              console.log(`Textarea changed: ${getControlItem.name} = ${event.target.value}`);
+            onChange={(event) =>
               setFormData({
                 ...formData,
                 [getControlItem.name]: event.target.value,
-              });
-            }}
+              })
+            }
           />
         );
 

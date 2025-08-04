@@ -2,14 +2,13 @@ import { Minus, Plus, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCartItem, updateCartQuantity } from "@/store/shop/cart-slice";
-import {toast} from 'sonner';
+import { toast } from "sonner";
 
 function UserCartItemsContent({ cartItem }) {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
-
 
   function handleUpdateQuantity(getCartItem, typeOfAction) {
     if (typeOfAction == "plus") {
@@ -30,57 +29,39 @@ function UserCartItemsContent({ cartItem }) {
         if (indexOfCurrentCartItem > -1) {
           const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
           if (getQuantity + 1 > getTotalStock) {
-            toast({
-              title: `Only ${getQuantity} quantity can be added for this item`,
-              variant: "destructive",
-            });
+            toast.success(`Only ${getQuantity} quantity can be added for this item`)
 
             return;
           }
         }
       }
     }
-dispatch(
-  updateCartQuantity({
-    userId: user?.id,
-    productId: getCartItem?.productId,
-    quantity:
-      typeOfAction === "plus"
-        ? getCartItem?.quantity + 1
-        : getCartItem?.quantity - 1,
-  })
-).then((data) => {
-  console.log("Update quantity response:", data);
 
-  if (data?.payload?._id || Array.isArray(data?.payload?.items)) {
-    toast.success("Cart item is updated successfully");
-  } else {
-    toast.error("Failed to update cart item");
+    dispatch(
+      updateCartQuantity({
+        userId: user?.id,
+        productId: getCartItem?.productId,
+        quantity:
+          typeOfAction === "plus"
+            ? getCartItem?.quantity + 1
+            : getCartItem?.quantity - 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast.success("Cart item is updated successfully")
+      }
+    });
   }
-}).catch((error) => {
-  console.error("Quantity update error:", error);
-  toast.error("Something went wrong while updating item");
-});
 
+  function handleCartItemDelete(getCartItem) {
+    dispatch(
+      deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast.success( "Cart item is deleted successfully")
+      }
+    });
   }
-function handleCartItemDelete(getCartItem) {
-  dispatch(
-    deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
-  ).then((data) => {
-    console.log("Delete cart item response:", data);
-
-    if (data?.payload?._id) {
-      toast.success("Cart item is deleted successfully");
-
-    } else {
-      toast.error("Failed to delete cart item");
-    }
-  }).catch((error) => {
-    console.error("Delete error:", error);
-    toast.error("Something went wrong while deleting item");
-  });
-}
-
 
   return (
     <div className="flex items-center space-x-4">

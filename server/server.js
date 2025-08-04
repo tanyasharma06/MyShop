@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config(); // Load environment variables from .env file
+require("dotenv").config({ path: ".env" }); // Load environment variables from .env file
 
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
@@ -18,7 +18,12 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 // Use environment variable for MongoDB connection
-const MONGODB_URI = process.env.MONGO_URL || "mongodb://localhost:27017/myshop";
+const MONGODB_URI = process.env.MONGO_URL;
+
+if (!MONGODB_URI) {
+  console.error("MONGO_URL environment variable is not defined.");
+  process.exit(1);
+}
 
 mongoose.connect(MONGODB_URI).then(()=>
     console.log("MongoDB connected successfully")).catch((err)=>{
@@ -30,7 +35,7 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://myshopf3.onrender.com' // Add your frontend domain when you have it
+     // Add your frontend domain when you have it
 ];
 
 app.use(

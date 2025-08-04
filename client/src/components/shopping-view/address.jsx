@@ -26,12 +26,15 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
+
+
   function handleManageAddress(event) {
     event.preventDefault();
 
     if (addressList.length >= 3 && currentEditedId === null) {
       setFormData(initialAddressFormData);
-       toast.error("You can add max 3 addresses");
+      toast.success( "You can add max 3 addresses")
+
 
       return;
     }
@@ -48,9 +51,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             dispatch(fetchAllAddresses(user?.id));
             setCurrentEditedId(null);
             setFormData(initialAddressFormData);
-            toast.success("Address updated successfully");
-        
-        
+            toast.success( "Address updated successfully")
           }
         })
       : dispatch(
@@ -62,7 +63,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
           if (data?.payload?.success) {
             dispatch(fetchAllAddresses(user?.id));
             setFormData(initialAddressFormData);
-            toast.success("Address added successfully");
+            toast.success("Address added successfully")
           }
         });
   }

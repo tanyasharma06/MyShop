@@ -9,7 +9,7 @@ function AdminProductTile({
   handleDelete,
 }) {
   return (
-    <Card className="w-full max-w-xs mx-auto">
+    <Card className="w-full max-w-sm mx-auto">
       <div>
         <div className="relative">
           <img
@@ -19,8 +19,8 @@ function AdminProductTile({
           />
         </div>
         <CardContent>
-          <h2 className="text-xl font-bold mb-1 mt-1">{product?.title}</h2>
-          <div className="flex justify-between items-center mb-1">
+          <h2 className="text-xl font-bold mb-2 mt-2">{product?.title}</h2>
+          <div className="flex justify-between items-center mb-2">
             <span
               className={`${
                 product?.salePrice > 0 ? "line-through" : ""

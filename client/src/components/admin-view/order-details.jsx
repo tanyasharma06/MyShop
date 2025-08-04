@@ -34,7 +34,7 @@ function AdminOrderDetailsView({ orderDetails }) {
         dispatch(getOrderDetailsForAdmin(orderDetails?._id));
         dispatch(getAllOrdersForAdmin());
         setFormData(initialFormData);
-        toast.success("Update Order...")
+        toast.success( data?.payload?.message)
       }
     });
   }
