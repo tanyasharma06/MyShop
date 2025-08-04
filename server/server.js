@@ -17,6 +17,7 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
+
 // Use environment variable for MongoDB connection
 const MONGODB_URI = process.env.MONGO_URL;
 
@@ -35,11 +36,8 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
     'http://localhost:5173',
-<<<<<<< HEAD
-     // Add your frontend domain when you have it
-=======
-   'https://myshopf3.onrender.com' // Add your frontend domain when you have it
->>>>>>> e0c8035390464f4ab7b8f2cdb114ea8ec60fd2db
+    'https://my-shopfrontend.vercel.app',
+    'https://myshop-frontend.vercel.app'
 ];
 
 app.use(
@@ -86,6 +84,10 @@ app.use("/api/shop/review", shopReviewRouter);
 
 // Common routes
 app.use("/api/common/feature", commonFeatureRouter);
+app.get("/", (req, res) => {
+  res.send("Backend is working ✅");
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
