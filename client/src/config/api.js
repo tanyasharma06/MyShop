@@ -1,6 +1,6 @@
 const API_CONFIG = {
   // Development
-  BASE_URL: 'http://localhost:5000',
+  BASE_URL: 'https://myshop-backend-fdzz.onrender.com',
   
   // Production (update with your actual Render backend URL after deployment)
 <<<<<<< HEAD
