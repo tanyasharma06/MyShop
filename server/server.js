@@ -35,14 +35,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-    'http://localhost:5173',
-<<<<<<< HEAD
-    'https://my-shopfrontend.vercel.app',
-    'https://myshop-frontend.vercel.app'
-];
-=======
-'https://my-shopfrontend.vercel.app'];
->>>>>>> 59eec1d0f426d41d022c87bae05821f8fd341dcb
+    'http://localhost:5173'];
 
 app.use(
     cors({
